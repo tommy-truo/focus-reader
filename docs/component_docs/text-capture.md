@@ -1,4 +1,4 @@
-# Capture
+# Text Capture
 
 ## Scope
 

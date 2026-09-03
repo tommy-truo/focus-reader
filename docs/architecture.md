@@ -10,9 +10,9 @@ The overlay is the product. Capture, processing, and display all happen on the d
 User selects text
         │
         ▼
-   ┌─────────┐
-   │ Capture │  page selection → one string
-   └────┬────┘     (keeps paragraph and list breaks)
+   ┌──────────────┐
+   │ Text Capture │  page selection → one string
+   └──────────────┘     (keeps paragraph and list breaks)
         │
         │ captured text ─────────────────────────────────┐
         ▼                                                │
