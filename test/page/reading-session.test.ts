@@ -103,14 +103,16 @@ describe("startReadingSession", () => {
     );
   });
 
-  it("rebuilds chunks when mode changes and restyles type without rebuilding", () => {
+  it("rebuilds chunks when mode changes and restyles font without rebuilding", () => {
     const { shadowRoot, onSettingsChange } = mount({ text: LONG_TEXT });
     const chunkBefore = q<HTMLElement>(shadowRoot, ".fr-chunk").textContent;
     const overlay = q<HTMLElement>(shadowRoot, ".fr-overlay");
 
-    q<HTMLInputElement>(shadowRoot, 'input[name="type"][value="serif"]').click();
+    const fontSelect = q<HTMLSelectElement>(shadowRoot, 'select[name="font"]');
+    fontSelect.value = "Georgia";
+    fontSelect.dispatchEvent(new Event("change", { bubbles: true }));
     expect(onSettingsChange).toHaveBeenCalled();
-    expect(overlay.dataset.type).toBe("serif");
+    expect(overlay.style.getPropertyValue("--font")).toContain("Georgia");
     expect(q<HTMLElement>(shadowRoot, ".fr-chunk").textContent).toBe(chunkBefore);
 
     q<HTMLInputElement>(shadowRoot, 'input[name="chunkMode"][value="custom"]').click();

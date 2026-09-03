@@ -8,7 +8,7 @@ Show the current chunk in the overlay and let the user move, restyle, or close t
 
 - A shadow root to render into
 - A navigator (current chunk and position)
-- Reader settings (type, theme, chunk mode)
+- Reader settings (font, font size, weight, theme, display mode)
 - Callbacks: close, and persist settings changes
 
 ## Output
@@ -23,7 +23,7 @@ Show the current chunk in the overlay and let the user move, restyle, or close t
 - Show one chunk at a time, with `n / total` place text
 - Disable previous on the first chunk and next on the last; show an end mark on the last chunk
 - Move with Previous/Next, left/right arrows, and wheel
-- Open a settings panel for type, words-on-screen, and theme; appearance applies immediately
+- Open a settings panel for font, font size, weight, words-on-screen, and theme (including custom background and text colors); appearance applies immediately
 - Close on Escape (or close the settings panel first if it is open)
 - Keep keyboard focus inside the overlay
 - Announce the current chunk to screen readers

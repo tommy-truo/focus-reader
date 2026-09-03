@@ -120,12 +120,12 @@ describe("createReaderView", () => {
   });
 
   describe("settings", () => {
-    it("applies type and theme immediately and emits the updated settings", () => {
+    it("applies font, weight, size, and theme immediately and emits the updated settings", () => {
       const { shadowRoot, onSettingsChange } = mount();
       q<HTMLButtonElement>(shadowRoot, ".fr-settings-toggle").click();
       const overlay = q<HTMLElement>(shadowRoot, ".fr-overlay");
       expect(overlay.dataset.theme).toBe("light");
-      expect(overlay.dataset.type).toBe("sans");
+      expect(overlay.style.getPropertyValue("--font")).toContain("Arial");
 
       q<HTMLInputElement>(shadowRoot, 'input[name="theme"][value="dark"]').click();
       expect(overlay.dataset.theme).toBe("dark");
@@ -134,12 +134,68 @@ describe("createReaderView", () => {
         theme: "dark",
       });
 
-      q<HTMLInputElement>(shadowRoot, 'input[name="type"][value="serif"]').click();
-      expect(overlay.dataset.type).toBe("serif");
+      const fontSelect = q<HTMLSelectElement>(shadowRoot, 'select[name="font"]');
+      fontSelect.value = "Times New Roman";
+      fontSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      expect(overlay.style.getPropertyValue("--font")).toContain("Times New Roman");
       expect(onSettingsChange).toHaveBeenLastCalledWith({
         ...DEFAULT_READER_SETTINGS,
         theme: "dark",
-        type: "serif",
+        font: "Times New Roman",
+      });
+
+      q<HTMLInputElement>(shadowRoot, 'input[name="fontWeight"]').click();
+      expect(overlay.style.getPropertyValue("--chunk-weight")).toBe("700");
+      expect(onSettingsChange).toHaveBeenLastCalledWith({
+        ...DEFAULT_READER_SETTINGS,
+        theme: "dark",
+        font: "Times New Roman",
+        fontWeight: "bold",
+      });
+
+      const fontSize = q<HTMLInputElement>(shadowRoot, 'input[name="fontSize"]');
+      fontSize.value = "36";
+      fontSize.dispatchEvent(new Event("change", { bubbles: true }));
+      expect(overlay.style.getPropertyValue("--chunk-size")).toBe("36px");
+      expect(onSettingsChange).toHaveBeenLastCalledWith({
+        ...DEFAULT_READER_SETTINGS,
+        theme: "dark",
+        font: "Times New Roman",
+        fontWeight: "bold",
+        fontSize: 36,
+      });
+    });
+
+    it("shows custom color controls and applies background and text colors", () => {
+      const { shadowRoot, onSettingsChange } = mount();
+      q<HTMLButtonElement>(shadowRoot, ".fr-settings-toggle").click();
+      const overlay = q<HTMLElement>(shadowRoot, ".fr-overlay");
+      const customColors = q<HTMLElement>(shadowRoot, ".fr-custom-colors");
+      expect(customColors.hidden).toBe(true);
+
+      q<HTMLInputElement>(shadowRoot, 'input[name="theme"][value="custom"]').click();
+      expect(overlay.dataset.theme).toBe("custom");
+      expect(customColors.hidden).toBe(false);
+
+      const background = q<HTMLInputElement>(shadowRoot, 'input[name="customBackground"]');
+      background.value = "#112233";
+      background.dispatchEvent(new Event("input", { bubbles: true }));
+      expect(overlay.style.getPropertyValue("--custom-bg")).toBe("#112233");
+      expect(onSettingsChange).toHaveBeenLastCalledWith({
+        ...DEFAULT_READER_SETTINGS,
+        theme: "custom",
+        customBackground: "#112233",
+      });
+
+      const text = q<HTMLInputElement>(shadowRoot, 'input[name="customText"]');
+      text.value = "#abcdef";
+      text.dispatchEvent(new Event("change", { bubbles: true }));
+      expect(overlay.style.getPropertyValue("--custom-text")).toBe("#abcdef");
+      expect(onSettingsChange).toHaveBeenLastCalledWith({
+        ...DEFAULT_READER_SETTINGS,
+        theme: "custom",
+        customBackground: "#112233",
+        customText: "#abcdef",
       });
     });
 

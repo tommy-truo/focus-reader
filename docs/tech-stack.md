@@ -31,7 +31,7 @@ This document records **how** Focus Reader is built. The pipeline and session mo
 
 **`Intl.Segmenter`** covers “split on word-like units, not whitespace alone” without an NLP library. Join rules and chunk heuristics stay in our code, as specified.
 
-**`chrome.storage.local`** keeps type, theme, and chunk settings on the device. Sync can wait.
+**`chrome.storage.local`** keeps font, theme, and chunk settings on the device. Sync can wait.
 
 **Vitest** fits a Vite-based WXT project. Most correctness lives in pure functions.
 

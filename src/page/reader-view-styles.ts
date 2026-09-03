@@ -37,21 +37,13 @@ export const READER_VIEW_CSS = `
   --btn-bg: #242628;
 }
 
-.fr-overlay[data-theme="sepia"] {
-  --bg: #f1e6cf;
-  --text: #3b2f1e;
-  --muted: #6d5c42;
-  --line: #d9c7a5;
-  --focus: #7a4e1d;
-  --btn-bg: #e7d8b8;
-}
-
-.fr-overlay[data-type="sans"] {
-  --font: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
-}
-
-.fr-overlay[data-type="serif"] {
-  --font: ui-serif, Georgia, "Times New Roman", serif;
+.fr-overlay[data-theme="custom"] {
+  --bg: var(--custom-bg);
+  --text: var(--custom-text);
+  --muted: color-mix(in srgb, var(--text) 65%, var(--bg));
+  --line: color-mix(in srgb, var(--text) 22%, var(--bg));
+  --focus: color-mix(in srgb, var(--text) 80%, var(--bg));
+  --btn-bg: color-mix(in srgb, var(--text) 12%, var(--bg));
 }
 
 .fr-toolbar {
@@ -77,8 +69,8 @@ export const READER_VIEW_CSS = `
   margin: 0;
   max-width: 38rem;
   text-align: center;
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
-  font-weight: 400;
+  font-size: var(--chunk-size);
+  font-weight: var(--chunk-weight);
 }
 
 .fr-end-mark {
@@ -90,7 +82,8 @@ export const READER_VIEW_CSS = `
 }
 
 .fr-end-mark[hidden],
-.fr-settings[hidden] {
+.fr-settings[hidden],
+.fr-custom-colors[hidden] {
   display: none;
 }
 
@@ -147,7 +140,9 @@ export const READER_VIEW_CSS = `
   font-size: 1rem;
 }
 
-.fr-word-count {
+.fr-word-count,
+.fr-font-size,
+.fr-font-select {
   width: 4.5rem;
   padding: 0.3rem 0.4rem;
   border: 1px solid var(--line);
@@ -155,6 +150,40 @@ export const READER_VIEW_CSS = `
   background: var(--bg);
   color: var(--text);
   font: inherit;
+}
+
+.fr-font-select {
+  width: 100%;
+  max-width: 16rem;
+}
+
+.fr-custom-colors {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.fr-color-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.fr-color-row span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.fr-color-row input[type="color"] {
+  width: 2.5rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  background: var(--bg);
+  cursor: pointer;
 }
 
 button {
@@ -174,6 +203,7 @@ button:disabled {
 
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 .fr-overlay:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;

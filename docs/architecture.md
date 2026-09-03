@@ -60,7 +60,7 @@ Capture’s string is stored and then **forks**. The cleanser → tokenizer → 
 6. Reader view mounts into a shadow root, covers the page, and shows the current chunk.
 7. Previous / next (buttons, arrows, wheel) move the navigator index. The chunk list does not change.
 8. If the user changes chunk mode or word count, the session **rebuilds from the stored captured text**: cleanser through segmenter run again, remapper picks a new index, a new navigator is supplied, and reader view refreshes without recapturing.
-9. Type and theme changes restyle the overlay immediately; they do not rebuild chunks.
+9. Font, size, weight, and theme changes restyle the overlay immediately; they do not rebuild chunks.
 10. Escape closes the settings panel if it is open, otherwise it ends the session and removes the overlay.
 
 Paste and speech, when added, should feed the same overlay and the same pipeline after Capture — not a second UI.
@@ -147,7 +147,7 @@ cleanser → tokenizer → normalizer      │
 
 Progress is a running token count across chunks (whitespace-separated words), not a string offset and not a percentage of chunk count. A bad index is clamped. Empty lists map to index `0`. The index does not wrap.
 
-Reader view shows one chunk, `n / total`, previous/next, settings, and close. It traps focus, announces the current chunk, and applies type/theme immediately. Previous is disabled on the first chunk; next is disabled on the last, which also shows an end mark.
+Reader view shows one chunk, `n / total`, previous/next, settings, and close. It traps focus, announces the current chunk, and applies appearance immediately. Previous is disabled on the first chunk; next is disabled on the last, which also shows an end mark.
 
 ## Runtime boundaries
 
@@ -162,7 +162,7 @@ These boundaries matter more than folder names. The source folders that enforce 
 
 The pipeline should stay pure so it can be reused when Capture is not a page selection (for example paste). Reader view should not import tokenizer or segmenter. Capture should not know about chunks.
 
-Settings that change chunking (mode, word count) retrigger the pipeline from stored captured text. Settings that only change appearance (type, theme) do not.
+Settings that change chunking (mode, word count) retrigger the pipeline from stored captured text. Settings that only change appearance (font, size, weight, theme) do not.
 
 ## Data in a session
 
@@ -173,7 +173,7 @@ A running session needs at least:
 - Chunk options (`auto` or `custom`, plus word count for `custom`)
 - Current chunk list
 - Navigator index
-- Appearance settings (type, theme)
+- Appearance settings (font, size, weight, theme)
 
 Captured text is the source of truth for rebuilds. The live page selection is not consulted again until the user starts a new session.
 
