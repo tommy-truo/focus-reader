@@ -147,7 +147,7 @@ cleanser → tokenizer → normalizer      │
 
 Progress is a running token count across chunks (whitespace-separated words), not a string offset and not a percentage of chunk count. A bad index is clamped. Empty lists map to index `0`. The index does not wrap.
 
-Reader view shows one chunk, `n / total`, previous/next, settings, and close. It traps focus, announces the current chunk, and applies appearance immediately. Previous is disabled on the first chunk; next is disabled on the last, which also shows an end mark.
+Reader view shows one chunk, `n / total`, previous/next, settings, and close. It traps focus, announces the current chunk, and applies appearance immediately. Previous is disabled on the first chunk; next is disabled on the last, which also shows “end of section reached” and a confetti popper.
 
 ## Runtime boundaries
 

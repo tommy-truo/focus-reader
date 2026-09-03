@@ -39,6 +39,7 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
   let settingsOpen = false;
   let destroyed = false;
   let wheelDelta = 0;
+  let confettiTimer: ReturnType<typeof setTimeout> | undefined;
 
   const host = shadowRoot.host as HTMLElement;
   const prevOverflow = document.documentElement.style.overflow;
@@ -61,7 +62,11 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
 
   overlay.innerHTML = `
     <div class="fr-toolbar">
-      <button type="button" class="fr-settings-toggle" aria-expanded="false" aria-controls="${settingsId}">Settings</button>
+      <button type="button" class="fr-settings-toggle fr-icon-btn" aria-expanded="false" aria-controls="${settingsId}" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96c-.5-.39-1.04-.7-1.63-.94l-.36-2.54a.49.49 0 0 0-.5-.42h-3.84a.49.49 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.83 14.52a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.4.31.6.22l2.39-.96c.5.39 1.04.7 1.63.94l.36 2.54c.05.24.25.42.5.42h3.84c.25 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.55 1.63-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
+        </svg>
+      </button>
       <button type="button" class="fr-close fr-icon-btn" aria-label="Close">&times;</button>
     </div>
     <form class="fr-settings" id="${settingsId}" hidden>
@@ -113,7 +118,23 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
     </form>
     <div class="fr-main">
       <p class="fr-chunk" id="${chunkId}" aria-live="polite"></p>
-      <div class="fr-end-mark" hidden aria-label="End of selection"></div>
+      <div class="fr-end-mark" hidden>
+        <span class="fr-end-label">End reached!</span>
+        <button type="button" class="fr-confetti-btn" aria-label="Celebrate with confetti">
+          <svg class="fr-confetti-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M2.8 21.2 9.1 8.6l6.2 5.1z"/>
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9.3 9.1c2.4-1.6 5.4-.6 7.1 1.4"/>
+            <circle cx="15.2" cy="4.8" r="1.2" fill="#f2c14e"/>
+            <circle cx="18.8" cy="7.4" r="1.1" fill="#e85d4c"/>
+            <circle cx="20.4" cy="11.6" r="1" fill="#5aa9e6"/>
+            <circle cx="13.4" cy="6.4" r="0.9" fill="#7bc77e"/>
+            <circle cx="17.6" cy="14.2" r="0.9" fill="#c084fc"/>
+            <path fill="none" stroke="#f2c14e" stroke-linecap="round" stroke-width="1.3" d="M12.4 3.6v2.3"/>
+            <path fill="none" stroke="#e85d4c" stroke-linecap="round" stroke-width="1.3" d="M21.2 6.2h-2.2"/>
+            <path fill="none" stroke="#5aa9e6" stroke-linecap="round" stroke-width="1.3" d="M20.2 13.6l1.8 1.4"/>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="fr-footer">
       <button type="button" class="fr-prev">Previous</button>
@@ -237,6 +258,14 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
     }
     if (target.closest(".fr-prev")) {
       goPrev();
+      return;
+    }
+    const popper = target.closest(".fr-confetti-btn");
+    if (popper instanceof HTMLElement) {
+      window.clearTimeout(confettiTimer);
+      burstConfetti(overlay, popper, (id) => {
+        confettiTimer = id;
+      });
     }
   }
 
@@ -396,11 +425,58 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      window.clearTimeout(confettiTimer);
       document.removeEventListener("focusin", onDocumentFocusIn);
       document.documentElement.style.overflow = prevOverflow;
       shadowRoot.replaceChildren();
     },
   };
+}
+
+const CONFETTI_COLORS = [
+  "#e85d4c",
+  "#f2c14e",
+  "#7bc77e",
+  "#5aa9e6",
+  "#c084fc",
+  "#f97316",
+];
+
+function burstConfetti(
+  overlay: HTMLElement,
+  origin: HTMLElement,
+  onTimer: (id: ReturnType<typeof setTimeout>) => void,
+): void {
+  overlay.querySelector(".fr-confetti-layer")?.remove();
+
+  const overlayRect = overlay.getBoundingClientRect();
+  const originRect = origin.getBoundingClientRect();
+  const originX = originRect.left + originRect.width / 2 - overlayRect.left;
+  const originY = originRect.top + originRect.height / 2 - overlayRect.top;
+
+  const layer = document.createElement("div");
+  layer.className = "fr-confetti-layer";
+  layer.setAttribute("aria-hidden", "true");
+
+  const count = 36;
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement("span");
+    piece.className = "fr-confetti-piece";
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+    const dist = 70 + Math.random() * 130;
+    piece.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+    piece.style.setProperty("--dy", `${Math.sin(angle) * dist - 36}px`);
+    piece.style.setProperty("--rot", `${Math.random() * 640 - 320}deg`);
+    piece.style.left = `${originX}px`;
+    piece.style.top = `${originY}px`;
+    piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+    piece.style.width = `${5 + Math.random() * 5}px`;
+    piece.style.height = `${8 + Math.random() * 6}px`;
+    layer.append(piece);
+  }
+
+  overlay.append(layer);
+  onTimer(window.setTimeout(() => layer.remove(), 1100));
 }
 
 function applyAppearance(overlay: HTMLElement, settings: ReaderSettings): void {

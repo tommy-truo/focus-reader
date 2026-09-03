@@ -63,6 +63,13 @@ describe("createReaderView", () => {
       expect(q<HTMLButtonElement>(last.shadowRoot, ".fr-prev").disabled).toBe(false);
       expect(q<HTMLButtonElement>(last.shadowRoot, ".fr-next").disabled).toBe(true);
       expect(q<HTMLElement>(last.shadowRoot, ".fr-end-mark").hidden).toBe(false);
+      expect(q(last.shadowRoot, ".fr-end-label").textContent).toBe("End reached!");
+    });
+
+    it("bursts confetti when the end-of-section popper is clicked", () => {
+      const { shadowRoot } = mount({ startIndex: 2 });
+      q<HTMLButtonElement>(shadowRoot, ".fr-confetti-btn").click();
+      expect(shadowRoot.querySelectorAll(".fr-confetti-piece").length).toBeGreaterThan(10);
     });
 
     it("shows an end mark only on the last non-empty chunk", () => {

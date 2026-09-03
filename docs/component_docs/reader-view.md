@@ -21,7 +21,7 @@ Show the current chunk in the overlay and let the user move, restyle, or close t
 ## Features
 
 - Show one chunk at a time, with `n / total` place text
-- Disable previous on the first chunk and next on the last; show an end mark on the last chunk
+- Disable previous on the first chunk and next on the last; on the last chunk, show “end of section reached” with a confetti popper
 - Move with Previous/Next, left/right arrows, and wheel
 - Open a settings panel for font, font size, weight, words-on-screen, and theme (including custom background and text colors); appearance applies immediately
 - Close on Escape (or close the settings panel first if it is open)

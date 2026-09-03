@@ -11,6 +11,7 @@ export const READER_VIEW_CSS = `
   flex-direction: column;
   box-sizing: border-box;
   padding: 1.25rem 1.5rem 1.5rem;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -74,11 +75,67 @@ export const READER_VIEW_CSS = `
 }
 
 .fr-end-mark {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background: var(--text);
-  opacity: 0.55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.fr-end-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.fr-confetti-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.fr-confetti-btn:hover {
+  transform: rotate(-12deg) scale(1.08);
+}
+
+.fr-confetti-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: block;
+}
+
+.fr-confetti-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.fr-confetti-piece {
+  position: absolute;
+  display: block;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+  animation: fr-confetti-burst 1s ease-out forwards;
+}
+
+@keyframes fr-confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(0.65);
+  }
 }
 
 .fr-end-mark[hidden],
@@ -218,5 +275,11 @@ select:focus-visible,
   justify-content: center;
   font-size: 1.2rem;
   line-height: 1;
+}
+
+.fr-icon-btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: block;
 }
 `;
