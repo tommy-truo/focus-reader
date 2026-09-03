@@ -1,61 +1,75 @@
 # Focus Reader
 
-> **Status:** In development — documentation and project setup only. The extension is not yet installable from the Chrome Web Store or buildable from this repository.
+Chrome extension that shows selected page text **one segment at a time** in a full-page overlay.
 
-Chrome extension for focus-friendly reading of highlighted webpage text. For the full project story — problem, audience, and goals — see **[PROJECT.md](./PROJECT.md)**.
+This file is for people working on the extension. Product intent, audience, and status live in [PROJECT.md](./PROJECT.md).
 
-## Getting Focus Reader
+## Status
 
-**Chrome Web Store:** Not published yet. This repository will link to the store listing once v1 is released.
+Focus Reader is **in active development**. It is not on the Chrome Web Store.
 
-**Develop from source:** See [Development](#development) below (available after the extension codebase is added to this repo).
+The repo currently holds product docs, architecture, and stage contracts. The WXT / TypeScript implementation is not in the tree yet; the steps below are the intended workflow once the package is scaffolded.
 
-## Development
+## Prerequisites
 
-Extension source and build tooling are not in the repository yet. The workflow below is the intended setup once implementation begins.
+- [Node.js](https://nodejs.org/) LTS
+- npm (bundled with Node)
+- Chrome **120+** (Manifest V3 and `Intl.Segmenter`)
 
-Detailed specs and architecture are kept in local internal docs (`docs/internal/`, not tracked in this repository).
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) 20 LTS or later
-- Google Chrome (latest)
-
-### Setup
+## Setup
 
 ```bash
-git clone https://github.com/tommy-truo/focus-reader.git
-cd focus-reader
 npm install
-npm run build
+npm run dev
 ```
 
-### Load in Chrome (unpacked)
+Then load the unpacked extension in Chrome:
 
 1. Open `chrome://extensions`
-2. Enable **Developer mode**
+2. Turn on **Developer mode**
 3. Click **Load unpacked**
-4. Select the extension output directory (typically `dist/` after build)
+4. Select the WXT output folder (typically `.output/chrome-mv3`)
 
-### Development workflow
+WXT rebuilds on save. If Chrome does not pick up a change, click **Reload** on the extension card, then refresh the page you are reading.
 
-```bash
-npm run dev    # watch mode + rebuild on change
+To try a session: select text on a normal webpage, then click the toolbar icon or right-click **Read with Focus Reader**. Restricted pages (Chrome Web Store, `chrome://` URLs, and similar) cannot host the overlay.
+
+## Scripts
+
+These match a standard WXT + Vitest project. Confirm names in `package.json` after scaffolding.
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev build with HMR |
+| `npm run build` | Production build |
+| `npm run zip` | Zip for Chrome Web Store upload |
+| `npm test` | Unit tests (pipeline first) |
+
+## Layout
+
+Source layers from [tech stack](./docs/tech-stack.md). Architecture runtime boundaries live in [architecture.md](./docs/architecture.md).
+
+```
+src/
+  core/               # cleanser → navigator, settings types; no chrome, no DOM
+  page/               # capture, reader view, session wiring; DOM only
+  entrypoints/        # background + overlay content script; Chrome / WXT
+docs/                 # architecture, stack, stage contracts
+icons/
+PROJECT.md
 ```
 
-After rebuilding, click **Reload** on the extension card in `chrome://extensions`.
+`core` imports nothing from `page` or `entrypoints`. `page` may import `core`, never Chrome. `entrypoints` may import both and is the only layer that uses `browser.*`.
 
-## Documentation
+Inject the overlay **on toolbar click or context menu**, not on every page load.
 
-| Document | Description |
-|----------|-------------|
-| [PROJECT.md](./PROJECT.md) | Public project overview |
-| [docs/privacy-policy.md](./docs/privacy-policy.md) | Privacy policy (draft) |
+## Docs
 
-## Chrome Web Store
-
-This project targets public distribution on the Chrome Web Store once v1 is ready.
+- [PROJECT.md](./PROJECT.md) — what the product is and who it is for
+- [Architecture](./docs/architecture.md) — pipeline, session flow, runtime boundaries
+- [Tech stack](./docs/tech-stack.md) — TypeScript, WXT, Vitest, and why
+- [Component contracts](./docs/component_docs/) — per-stage inputs, outputs, and must-nots
 
 ## License
 
-License TBD — to be chosen before public release.
+[MIT](./LICENSE)

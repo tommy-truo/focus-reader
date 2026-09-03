@@ -1,6 +1,3 @@
-# Internal documentation (local only)
-docs/internal/
-
 # Dependencies
 node_modules/
 
