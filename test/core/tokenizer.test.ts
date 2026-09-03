@@ -53,6 +53,10 @@ describe("tokenize", () => {
       expect(tokenize("(Hello)")).toEqual(["(Hello)"]);
     });
 
+    it("attaches a trailing apostrophe to the preceding word", () => {
+      expect(tokenize("series' ideas")).toEqual(["series'", "ideas"]);
+    });
+
     it("attaches comma to the preceding word in a phrase", () => {
       expect(tokenize("Hello, world")).toEqual(["Hello,", "world"]);
     });
@@ -85,6 +89,61 @@ describe("tokenize", () => {
     it("splits a time and meridiem when they are separated by a space", () => {
       expect(tokenize("12:00 PM")).toEqual(["12:00", "PM"]);
       expect(tokenize("3:30 pm")).toEqual(["3:30", "pm"]);
+    });
+
+    it("keeps a year with a trailing s as one token", () => {
+      expect(tokenize("1980s")).toEqual(["1980s"]);
+      expect(tokenize("1980s.")).toEqual(["1980s."]);
+    });
+
+    it("keeps ordinal suffixes on numbers", () => {
+      expect(tokenize("1st")).toEqual(["1st"]);
+      expect(tokenize("2nd")).toEqual(["2nd"]);
+      expect(tokenize("3rd")).toEqual(["3rd"]);
+      expect(tokenize("4th")).toEqual(["4th"]);
+      expect(tokenize("21st")).toEqual(["21st"]);
+    });
+
+    it("attaches trailing punctuation to a number", () => {
+      expect(tokenize("1979.")).toEqual(["1979."]);
+      expect(tokenize("in 1997.")).toEqual(["in", "1997."]);
+    });
+
+    it("keeps wrapping parentheses on a number", () => {
+      expect(tokenize("(2004)")).toEqual(["(2004)"]);
+      expect(tokenize("(2004),")).toEqual(["(2004),"]);
+      expect(tokenize("Movie (2004), but")).toEqual([
+        "Movie",
+        "(2004),",
+        "but",
+      ]);
+    });
+
+    it("keeps years, decade suffixes, and parenthetical years intact in a sentence", () => {
+      const tokens = tokenize(
+        "created in the 1980s. pitched it in 1997. Movie (2004), but returned in 2015 until his death in 2018.",
+      );
+      expect(tokens).toEqual([
+        "created",
+        "in",
+        "the",
+        "1980s.",
+        "pitched",
+        "it",
+        "in",
+        "1997.",
+        "Movie",
+        "(2004),",
+        "but",
+        "returned",
+        "in",
+        "2015",
+        "until",
+        "his",
+        "death",
+        "in",
+        "2018.",
+      ]);
     });
   });
 
