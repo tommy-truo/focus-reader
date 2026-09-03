@@ -1,9 +1,15 @@
 import type { Navigator } from "../core/navigator";
 import {
+  clampFontSize,
   clampWordCount,
+  FONT_SIZE_MAX,
+  FONT_SIZE_MIN,
+  isReaderFont,
+  READER_FONTS,
+  READER_FONT_STACKS,
+  type ReaderFontWeight,
   type ReaderSettings,
   type ReaderTheme,
-  type ReaderType,
 } from "../core/settings";
 import { READER_VIEW_CSS } from "./reader-view-styles";
 
@@ -59,11 +65,20 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
       <button type="button" class="fr-close fr-icon-btn" aria-label="Close">&times;</button>
     </div>
     <form class="fr-settings" id="${settingsId}" hidden>
+      <label class="fr-field">
+        <span>Font</span>
+        <select class="fr-font-select" name="font">
+          ${READER_FONTS.map((font) => `<option value="${font}">${font}</option>`).join("")}
+        </select>
+      </label>
+      <label class="fr-field">
+        <span>Font size</span>
+        <input class="fr-font-size" name="fontSize" type="number" min="${FONT_SIZE_MIN}" max="${FONT_SIZE_MAX}" step="1">
+      </label>
       <div class="fr-field">
-        <span id="${uid}-type">Type</span>
-        <div class="fr-options" role="radiogroup" aria-labelledby="${uid}-type">
-          <label><input type="radio" name="type" value="sans"> Sans</label>
-          <label><input type="radio" name="type" value="serif"> Serif</label>
+        <span id="${uid}-weight">Weight</span>
+        <div class="fr-options" role="group" aria-labelledby="${uid}-weight">
+          <label><input type="checkbox" name="fontWeight"> Bold</label>
         </div>
       </div>
       <div class="fr-field">
@@ -71,11 +86,21 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
         <div class="fr-options" role="radiogroup" aria-labelledby="${uid}-theme">
           <label><input type="radio" name="theme" value="light"> Light</label>
           <label><input type="radio" name="theme" value="dark"> Dark</label>
-          <label><input type="radio" name="theme" value="sepia"> Sepia</label>
+          <label><input type="radio" name="theme" value="custom"> Custom</label>
         </div>
       </div>
+      <div class="fr-custom-colors">
+        <label class="fr-color-row">
+          <span>Background Color</span>
+          <input type="color" name="customBackground">
+        </label>
+        <label class="fr-color-row">
+          <span>Text Color</span>
+          <input type="color" name="customText">
+        </label>
+      </div>
       <div class="fr-field">
-        <span id="${uid}-mode">Chunk mode</span>
+        <span id="${uid}-mode">Display mode</span>
         <div class="fr-options" role="radiogroup" aria-labelledby="${uid}-mode">
           <label><input type="radio" name="chunkMode" value="auto"> Auto</label>
           <label><input type="radio" name="chunkMode" value="custom"> Custom</label>
@@ -108,6 +133,18 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
   const placeEl = overlay.querySelector<HTMLElement>(".fr-place")!;
   const endMark = overlay.querySelector<HTMLElement>(".fr-end-mark")!;
   const wordCountInput = overlay.querySelector<HTMLInputElement>(".fr-word-count")!;
+  const fontSelect = overlay.querySelector<HTMLSelectElement>(".fr-font-select")!;
+  const fontSizeInput = overlay.querySelector<HTMLInputElement>(".fr-font-size")!;
+  const fontWeightInput = overlay.querySelector<HTMLInputElement>(
+    'input[name="fontWeight"]',
+  )!;
+  const customColors = overlay.querySelector<HTMLElement>(".fr-custom-colors")!;
+  const customBackgroundInput = overlay.querySelector<HTMLInputElement>(
+    'input[name="customBackground"]',
+  )!;
+  const customTextInput = overlay.querySelector<HTMLInputElement>(
+    'input[name="customText"]',
+  )!;
 
   syncSettingsForm();
   render();
@@ -119,6 +156,7 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
   overlay.addEventListener("wheel", onWheel, { passive: false });
   overlay.addEventListener("click", onClick);
   settingsForm.addEventListener("change", onSettingsFormChange);
+  settingsForm.addEventListener("input", onSettingsFormInput);
   document.addEventListener("focusin", onDocumentFocusIn);
 
   function emitSettings(): void {
@@ -126,20 +164,22 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
   }
 
   function syncSettingsForm(): void {
-    const typeInput = settingsForm.querySelector<HTMLInputElement>(
-      `input[name="type"][value="${settings.type}"]`,
-    );
+    fontSelect.value = settings.font;
+    fontSizeInput.value = String(settings.fontSize);
+    fontWeightInput.checked = settings.fontWeight === "bold";
     const themeInput = settingsForm.querySelector<HTMLInputElement>(
       `input[name="theme"][value="${settings.theme}"]`,
     );
     const modeInput = settingsForm.querySelector<HTMLInputElement>(
       `input[name="chunkMode"][value="${settings.chunkMode}"]`,
     );
-    if (typeInput) typeInput.checked = true;
     if (themeInput) themeInput.checked = true;
     if (modeInput) modeInput.checked = true;
     wordCountInput.value = String(settings.wordCount);
     wordCountInput.disabled = settings.chunkMode !== "custom";
+    customBackgroundInput.value = settings.customBackground;
+    customTextInput.value = settings.customText;
+    customColors.hidden = settings.theme !== "custom";
   }
 
   function render(): void {
@@ -200,20 +240,58 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
     }
   }
 
-  function onSettingsFormChange(event: Event): void {
+  function applyAppearanceAndEmit(): void {
+    applyAppearance(overlay, settings);
+    emitSettings();
+  }
+
+  function onSettingsFormInput(event: Event): void {
     const target = event.target;
     if (!(target instanceof HTMLInputElement)) return;
+    if (target.name === "customBackground" || target.name === "customText") {
+      applyColorSetting(target);
+    }
+  }
 
-    if (target.name === "type") {
-      settings = { ...settings, type: target.value as ReaderType };
-      applyAppearance(overlay, settings);
-      emitSettings();
+  function applyColorSetting(target: HTMLInputElement): void {
+    if (target.name === "customBackground") {
+      settings = { ...settings, customBackground: target.value };
+    } else {
+      settings = { ...settings, customText: target.value };
+    }
+    applyAppearanceAndEmit();
+  }
+
+  function onSettingsFormChange(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLSelectElement && target.name === "font") {
+      if (!isReaderFont(target.value)) return;
+      settings = { ...settings, font: target.value };
+      applyAppearanceAndEmit();
+      return;
+    }
+    if (!(target instanceof HTMLInputElement)) return;
+
+    if (target.name === "fontSize") {
+      settings = { ...settings, fontSize: clampFontSize(target.valueAsNumber) };
+      fontSizeInput.value = String(settings.fontSize);
+      applyAppearanceAndEmit();
+      return;
+    }
+    if (target.name === "fontWeight") {
+      const fontWeight: ReaderFontWeight = target.checked ? "bold" : "normal";
+      settings = { ...settings, fontWeight };
+      applyAppearanceAndEmit();
       return;
     }
     if (target.name === "theme") {
       settings = { ...settings, theme: target.value as ReaderTheme };
-      applyAppearance(overlay, settings);
-      emitSettings();
+      customColors.hidden = settings.theme !== "custom";
+      applyAppearanceAndEmit();
+      return;
+    }
+    if (target.name === "customBackground" || target.name === "customText") {
+      applyColorSetting(target);
       return;
     }
     if (target.name === "chunkMode") {
@@ -230,7 +308,11 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
   }
 
   function isTypingTarget(target: EventTarget | null): boolean {
-    return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
+    return (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    );
   }
 
   function onKeyDown(event: KeyboardEvent): void {
@@ -323,5 +405,12 @@ export function createReaderView(options: ReaderViewOptions): ReaderView {
 
 function applyAppearance(overlay: HTMLElement, settings: ReaderSettings): void {
   overlay.dataset.theme = settings.theme;
-  overlay.dataset.type = settings.type;
+  overlay.style.setProperty("--font", READER_FONT_STACKS[settings.font]);
+  overlay.style.setProperty("--chunk-size", `${settings.fontSize}px`);
+  overlay.style.setProperty(
+    "--chunk-weight",
+    settings.fontWeight === "bold" ? "700" : "400",
+  );
+  overlay.style.setProperty("--custom-bg", settings.customBackground);
+  overlay.style.setProperty("--custom-text", settings.customText);
 }
