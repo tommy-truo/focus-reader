@@ -8,8 +8,6 @@ This file is for people working on the extension. Product intent, audience, and 
 
 Focus Reader is **in active development**. It is not on the Chrome Web Store.
 
-The repo currently holds product docs, architecture, and stage contracts. The WXT / TypeScript implementation is not in the tree yet; the steps below are the intended workflow once the package is scaffolded.
-
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) LTS
@@ -28,7 +26,7 @@ Then load the unpacked extension in Chrome:
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
 3. Click **Load unpacked**
-4. Select the WXT output folder (typically `.output/chrome-mv3`)
+4. Select `.output/chrome-mv3-dev` (WXT's dev output). A production build (`npm run build`) writes `.output/chrome-mv3`.
 
 WXT rebuilds on save. If Chrome does not pick up a change, click **Reload** on the extension card, then refresh the page you are reading.
 
@@ -36,14 +34,12 @@ To try a session: select text on a normal webpage, then click the toolbar icon o
 
 ## Scripts
 
-These match a standard WXT + Vitest project. Confirm names in `package.json` after scaffolding.
-
 | Command | What it does |
 |---|---|
-| `npm run dev` | Dev build with HMR |
-| `npm run build` | Production build |
+| `npm run dev` | Dev build with HMR (output in `.output/chrome-mv3-dev`) |
+| `npm run build` | Production build (`.output/chrome-mv3`) |
 | `npm run zip` | Zip for Chrome Web Store upload |
-| `npm test` | Unit tests (pipeline first) |
+| `npm test` | Unit tests (Vitest) |
 
 ## Layout
 
@@ -54,8 +50,8 @@ src/
   core/               # cleanser → navigator, settings types; no chrome, no DOM
   page/               # capture, reader view, session wiring; DOM only
   entrypoints/        # background + overlay content script; Chrome / WXT
+public/icons/         # toolbar icons copied into the packaged extension
 docs/                 # architecture, stack, stage contracts
-icons/
 PROJECT.md
 ```
 

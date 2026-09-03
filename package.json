@@ -1,14 +1,21 @@
 {
   "name": "focus-reader",
   "private": true,
+  "version": "0.1.0",
+  "description": "Read selected page text one chunk at a time in a full-page overlay.",
   "type": "module",
   "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
     "jsdom": "^30.0.1",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wxt": "^0.21.4"
   }
 }
