@@ -6,7 +6,7 @@ Group tokens into display chunks. A chunk is the text shown on screen at one tim
 
 ## Input
 
-- Ordered normalized tokens from the Token Normalizer (already fused units such as `Dr. Smith` or `12:00 PM`)
+- Ordered normalized tokens from the Token Normalizer (already fused units such as `Dr. Smith`, `Dr. Smith Jr.`, `Smith Jr.`, or `12:00 PM`)
 - Captured text from the Capture stage (used so sentence and paragraph breaks match the selection)
 - Locale (defaults to English)
 - Chunking options: `auto` or `custom`, plus a word count for `custom`

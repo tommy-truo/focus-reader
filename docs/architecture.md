@@ -27,7 +27,7 @@ User selects text
          │ tokens                                        │
          ▼                                               │
    ┌──────────────────┐                                  │
-   │ Token Normalizer │  fuse titles, times, abbrevs     │
+   │ Token Normalizer │  fuse names, times, abbrevs      │
    └────────┬─────────┘                                  │
             │ normalized tokens                          │ original formatting
             └────────────────────┬───────────────────────┘
@@ -86,7 +86,7 @@ Capture returns exactly what was highlighted, including paragraph and list break
 
 The cleanser then trims, turns those breaks into single spaces, and collapses space/tab runs. That flattening is required so the tokenizer can split a single linear string. The tokenizer never sees layout — only the cleansed string — and splits it into word-like units. Punctuation stays attached (`Hello,`, `"Hello,"`). Numerics with internal punctuation stay one token (`1,000`, `12:00`, `3:30pm`).
 
-The tokenizer is mechanical. It does not know that `Dr.` + `Smith` is a name. The normalizer fuses those fragments (titles + name, time + meridiem, common abbreviations) in one left-to-right pass. Join rules should be extendable without changing the tokenizer or segmenter.
+The tokenizer is mechanical. It does not know that `Dr.` + `Smith` is a name, or that `Jr.` belongs with that name. The normalizer fuses those fragments (title + name, name + `Sr.`/`Jr.`, time + meridiem, common abbreviations) in one left-to-right pass. Join rules should be extendable without changing the tokenizer or segmenter.
 
 ### Segmenter inputs
 
@@ -94,7 +94,7 @@ The segmenter is the first stage that needs **two** views of the same selection:
 
 | Input | From | Role |
 |---|---|---|
-| Normalized tokens | Token Normalizer | Opaque units to count, join with spaces, or place a chunk boundary beside. Already fused (`Dr. Smith`, `12:00 PM`). The segmenter must not split inside a token or inspect it for titles, numbers, or times. |
+| Normalized tokens | Token Normalizer | Opaque units to count, join with spaces, or place a chunk boundary beside. Already fused (`Dr. Smith`, `Dr. Smith Jr.`, `Smith Jr.`, `12:00 PM`). The segmenter must not split inside a token or inspect it for titles, numbers, or times. |
 | Captured text | Capture (not the cleanser) | Original formatting: paragraph breaks, list breaks, and other newlines as they were highlighted. Used so auto-mode structure and sentence splits follow the selection. |
 | Locale | Session (default English) | English-first heuristics; other locales get structure and sentence splits only. |
 | Chunk options | Settings | `auto` or `custom`, plus a word count for `custom`. |
