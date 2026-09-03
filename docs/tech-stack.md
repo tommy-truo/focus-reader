@@ -2,19 +2,6 @@
 
 This document records **how** Focus Reader is built. The pipeline and session model are in [architecture.md](./architecture.md). Stage contracts are in [component_docs](./component_docs/).
 
-Stack choices should not leak into architecture. The overlay-and-pipeline design stays valid if the bundler changes; the reverse is not true.
-
-## Why this is a separate doc
-
-| Doc | Answers | Changes when |
-|---|---|---|
-| [PROJECT.md](../PROJECT.md) | What the product is and who it is for | Product intent changes |
-| [architecture.md](./architecture.md) | How stages connect, what data moves, where code may run | Pipeline or session model changes |
-| **This file** | Language, extension tooling, UI approach, tests | Implementation choices change |
-| README (when present) | How to install, run, and load the unpacked extension | Scripts or setup steps change |
-
-Putting WXT, Vite, or Vitest in architecture would mix a stable design with tooling that we may replace. Putting the stack rationale only in a README would bury the “why” under clone-and-run steps. README should link here and stay operational.
-
 ## Stack
 
 | Layer | Choice |
@@ -49,15 +36,6 @@ Putting WXT, Vite, or Vitest in architecture would mix a stable design with tool
 **Vitest** fits a Vite-based WXT project. Most correctness lives in pure functions.
 
 **Plain CSS** in the shadow root avoids host-page leakage. Themes are custom properties (`--bg`, `--text`, and similar). Tailwind is a poor fit for Shadow DOM.
-
-## What we are not using
-
-- **React, Preact, Svelte** — too much for one overlay; they inflate the content-script bundle.
-- **Lit** — the right upgrade if the settings panel grows (paste, speech). Do not start there.
-- **Plasmo** — React-first and in maintenance mode.
-- **CRXJS as the project framework** — a Vite plugin, not a greenfield default next to WXT.
-- **A backend or hosted fonts/analytics** — conflicts with on-device processing.
-- **Tokenizer libraries** (`compromise`, `wink`, and similar) — the English-first rules are explicit and owned by the normalizer and segmenter.
 
 ## Source layout
 
