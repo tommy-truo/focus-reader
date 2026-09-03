@@ -101,6 +101,44 @@ describe("captureText", () => {
       selectNodeContents(document.querySelector("p")!);
       expect(captureText()).toBe("Hello world");
     });
+
+    it("inserts a paragraph break between a heading and the following paragraph", () => {
+      document.body.innerHTML =
+        "<div><h2>Porsche 718 Cayman</h2><p>The Porsche 718 Cayman is a mid-engined coupe.</p></div>";
+      selectNodeContents(document.querySelector("div")!);
+      expect(captureText()).toBe(
+        "Porsche 718 Cayman\n\nThe Porsche 718 Cayman is a mid-engined coupe.",
+      );
+    });
+
+    it("inserts a paragraph break between custom heading and text hosts", () => {
+      document.body.innerHTML =
+        "<section><p-heading>Porsche 718 Cayman</p-heading><p-text>The Porsche 718 Cayman is a mid-engined coupe.</p-text></section>";
+      selectNodeContents(document.querySelector("section")!);
+      expect(captureText()).toBe(
+        "Porsche 718 Cayman\n\nThe Porsche 718 Cayman is a mid-engined coupe.",
+      );
+    });
+
+    it("inserts breaks between adjacent custom text hosts", () => {
+      document.body.innerHTML =
+        "<section><p-text>First paragraph.</p-text><p-text>Second paragraph.</p-text></section>";
+      selectNodeContents(document.querySelector("section")!);
+      expect(captureText()).toBe("First paragraph.\n\nSecond paragraph.");
+    });
+
+    it("inserts breaks between custom list items", () => {
+      document.body.innerHTML =
+        "<p-text-list><p-text-list-item><p-text>apples</p-text></p-text-list-item><p-text-list-item><p-text>oranges</p-text></p-text-list-item></p-text-list>";
+      selectNodeContents(document.querySelector("p-text-list")!);
+      expect(captureText()).toBe("apples\n\noranges");
+    });
+
+    it("does not insert a break for an inline custom element inside a paragraph", () => {
+      document.body.innerHTML = "<p>Hello <x-em>world</x-em></p>";
+      selectNodeContents(document.querySelector("p")!);
+      expect(captureText()).toBe("Hello world");
+    });
   });
 
   describe("form fields", () => {

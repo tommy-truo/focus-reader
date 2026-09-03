@@ -76,6 +76,25 @@ describe("startReadingSession", () => {
     expect(q<HTMLElement>(shadowRoot, ".fr-place").textContent).toMatch(/^1 \//);
   });
 
+  it("shows a custom heading on its own chunk before the following paragraph", () => {
+    document.body.innerHTML =
+      "<section><p-heading>Porsche 718 Cayman</p-heading><p-text>The Porsche 718 Cayman is a mid-engined coupe with compact proportions and a focused sportscar character.</p-text></section>";
+    const range = document.createRange();
+    range.selectNodeContents(document.querySelector("section")!);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+
+    const { shadowRoot, session } = mount();
+    expect(session).not.toBeNull();
+    expect(q<HTMLElement>(shadowRoot, ".fr-chunk").textContent).toBe(
+      "Porsche 718 Cayman",
+    );
+    expect(q<HTMLElement>(shadowRoot, ".fr-place").textContent).toMatch(
+      /^1 \/ [2-9]\d*$/,
+    );
+  });
+
   it("uses fallbackText when nothing is selected", () => {
     const { shadowRoot, session } = mount({ fallbackText: "Fallback chunk." });
     expect(session).not.toBeNull();

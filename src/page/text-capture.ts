@@ -43,6 +43,71 @@ const BLOCK_TAGS = new Set([
   "UL",
 ]);
 
+const BLOCK_DISPLAYS = new Set([
+  "block",
+  "flex",
+  "flow-root",
+  "grid",
+  "list-item",
+  "table",
+  "table-caption",
+  "table-cell",
+  "table-row",
+  "table-row-group",
+  "table-header-group",
+  "table-footer-group",
+]);
+
+const INLINE_LEVEL_DISPLAYS = new Set([
+  "inline-block",
+  "inline-flex",
+  "inline-grid",
+]);
+
+/** Text containers where a nested custom element is still inline phrasing. */
+const PHRASING_CONTAINER_TAGS = new Set([
+  "A",
+  "ABBR",
+  "B",
+  "BDI",
+  "BDO",
+  "BUTTON",
+  "CITE",
+  "CODE",
+  "DATA",
+  "DD",
+  "DFN",
+  "DT",
+  "EM",
+  "FIGCAPTION",
+  "H1",
+  "H2",
+  "H3",
+  "H4",
+  "H5",
+  "H6",
+  "I",
+  "KBD",
+  "LABEL",
+  "LI",
+  "MARK",
+  "P",
+  "PRE",
+  "Q",
+  "S",
+  "SAMP",
+  "SMALL",
+  "SPAN",
+  "STRONG",
+  "SUB",
+  "SUP",
+  "TD",
+  "TH",
+  "TIME",
+  "U",
+  "VAR",
+]);
+
 const TEXT_INPUT_TYPES = new Set([
   "email",
   "password",
@@ -330,13 +395,65 @@ function nearestBlock(node: Node): Element | null {
     if (current.tagName === "BODY" || current.tagName === "HTML") {
       return null;
     }
-    if (BLOCK_TAGS.has(current.tagName)) {
+    if (isBlockLike(current)) {
       return current;
     }
     current = current.parentElement;
   }
 
   return null;
+}
+
+function isBlockLike(element: Element): boolean {
+  if (BLOCK_TAGS.has(element.tagName)) {
+    return true;
+  }
+
+  const display = computedDisplay(element);
+  if (BLOCK_DISPLAYS.has(display)) {
+    return true;
+  }
+  if (INLINE_LEVEL_DISPLAYS.has(display)) {
+    return false;
+  }
+
+  // Design-system hosts (p-heading, p-text, …) are custom elements. The UA
+  // default display is inline, so tag/display lists miss them unless we treat
+  // un-nested custom elements as blocks.
+  if (element.localName.includes("-") && !isInsidePhrasingContainer(element)) {
+    return true;
+  }
+
+  return false;
+}
+
+function computedDisplay(element: Element): string {
+  const view = element.ownerDocument.defaultView;
+  if (view === null) {
+    return "";
+  }
+  try {
+    return view.getComputedStyle(element).display;
+  } catch {
+    return "";
+  }
+}
+
+function isInsidePhrasingContainer(element: Element): boolean {
+  let current = element.parentElement;
+  while (current) {
+    if (current.tagName === "BODY" || current.tagName === "HTML") {
+      return false;
+    }
+    if (PHRASING_CONTAINER_TAGS.has(current.tagName)) {
+      return true;
+    }
+    if (BLOCK_TAGS.has(current.tagName)) {
+      return false;
+    }
+    current = current.parentElement;
+  }
+  return false;
 }
 
 function strongerBreak(left: string, right: string): string {
