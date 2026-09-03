@@ -200,6 +200,25 @@ describe("tokenize then normalize", () => {
         "1.5",
       ]);
     });
+
+    it("keeps decade years, parenthetical years, and sentence-final years intact", () => {
+      expect(
+        tokenizeAndNormalize(
+          "created in the 1980s. Movie (2004), but returned in 2018.",
+        ),
+      ).toEqual([
+        "created",
+        "in",
+        "the",
+        "1980s.",
+        "Movie",
+        "(2004),",
+        "but",
+        "returned",
+        "in",
+        "2018.",
+      ]);
+    });
   });
 
   describe("mixed joins", () => {
