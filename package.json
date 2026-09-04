@@ -1,7 +1,7 @@
 {
   "name": "readveil",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Read selected page text one segment at a time in a full-page overlay.",
   "type": "module",
   "scripts": {
