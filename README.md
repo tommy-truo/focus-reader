@@ -67,7 +67,7 @@ Inject the overlay **on toolbar click or context menu**, not on every page load.
 - [Tech stack](./docs/tech-stack.md) — TypeScript, WXT, Vitest, and why
 - [Component contracts](./docs/component_docs/) — per-stage inputs, outputs, and must-nots
 - [Chrome Web Store listing](./docs/chrome-web-store.md) — paste-ready store copy and remaining upload steps
-- [Privacy policy](./docs/privacy-policy.md)
+- [Privacy policy](./docs/privacy/privacy-policy.md)
 
 ## License
 
