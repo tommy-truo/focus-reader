@@ -65,8 +65,13 @@
       <p class="updated">Last updated: 3 September 2026</p>
       <p>
         ReadVeil is a Chrome extension that shows selected webpage text one
-        segment at a time in a full-page overlay. This policy describes what
-        data the extension handles and what it does not do.
+        segment at a time in a full-page overlay. This policy explains what
+        information the extension handles, how that information is used, and
+        what it never does.
+      </p>
+      <p>
+        ReadVeil is developed by Tommy Truong. Questions:
+        <a href="mailto:dev.ttruong@gmail.com">dev.ttruong@gmail.com</a>.
       </p>
 
       <h2>Summary</h2>
@@ -76,57 +81,77 @@
           overlay can show reading segments.
         </li>
         <li>
-          Appearance and chunking preferences are saved
+          Appearance and reading preferences are saved
           <strong>on your device</strong> with Chrome’s local storage.
         </li>
         <li>
-          ReadVeil does <strong>not</strong> send your reading text,
-          browsing history, or settings to a server.
+          ReadVeil does <strong>not</strong> send your reading text, browsing
+          history, or settings to a server.
         </li>
         <li>
           ReadVeil does <strong>not</strong> use analytics, advertising,
-          accounts, or third-party trackers.
+          accounts, cookies, or third-party trackers.
         </li>
+        <li>Uninstalling the extension removes its local settings.</li>
       </ul>
 
-      <h2>Data the extension handles</h2>
+      <h2>Information the extension handles</h2>
       <h3>Selected text</h3>
       <p>
-        When you start a session (toolbar icon or
-        <strong>Read with ReadVeil</strong> on a selection), the extension
-        reads the text you highlighted on the current page. That text stays in
-        memory for the session so ReadVeil can split it into segments and
-        rebuild chunks if you change display settings. It is not written to
-        disk, not synced, and not sent over the network. Closing the overlay
-        discards it.
+        When you start a session — by clicking the toolbar icon or choosing
+        <strong>Read with ReadVeil</strong> on a selection — the extension
+        reads the text you highlighted on the current page. Chrome may also
+        pass the selected text from the context menu as a fallback if the live
+        page selection is not available.
+      </p>
+      <p>
+        That text stays in memory for the session so ReadVeil can split it
+        into segments and rebuild those segments if you change display
+        settings. It is not written to disk, not synced, and not sent over the
+        network. Closing the overlay discards it.
+      </p>
+      <p>
+        ReadVeil does not read the rest of the page, form fields you did not
+        select, passwords, or browsing history.
       </p>
       <h3>Settings</h3>
       <p>
         The extension saves reader preferences in
-        <code>chrome.storage.local</code> on your computer: font, size, weight,
-        theme, custom colors, chunk mode, and words-on-screen count. Chrome
-        keeps this data in the browser profile. ReadVeil does not sync it
-        to a developer-operated server.
+        <code>chrome.storage.local</code> in your browser profile: font, size,
+        and weight; theme and custom colors; chunk mode and words-on-screen
+        count.
+      </p>
+      <p>
+        These preferences exist only so the overlay looks the same the next
+        time you use it. They are not synced to a developer-operated server.
+        Chrome may sync this storage across your signed-in Chrome profiles if
+        you have extension sync enabled; that is a Chrome feature, not a
+        ReadVeil server.
       </p>
       <h3>What is not collected</h3>
       <p>
         ReadVeil does not collect names, email addresses, account
-        credentials, payment information, location, browsing history, cookies,
-        or the full contents of pages you visit. It only reads the selection
-        you choose to send into the overlay.
+        credentials, payment information, location, contacts, health data, or
+        identifiers. It does not log which sites you visit. It does not use
+        cookies.
       </p>
 
-      <h2>How data is used</h2>
+      <h2>How information is used</h2>
       <p>
         Selected text is used only to display reading segments in the overlay.
-        Settings are used only to restore your reader appearance and chunking
-        preferences the next time you open the overlay.
+        Settings are used only to restore your reader appearance and segment
+        preferences.
+      </p>
+      <p>
+        ReadVeil does not use this information for advertising, analytics,
+        profiling, or any purpose other than providing the reading overlay.
       </p>
 
       <h2>Sharing</h2>
       <p>
-        ReadVeil does not sell, rent, or share user data with third
-        parties. There is no developer backend and no analytics SDK.
+        ReadVeil does not sell, rent, or share user data with third parties.
+        There is no developer backend, no analytics SDK, and no advertising
+        network. The extension does not make network requests.
       </p>
 
       <h2>Permissions</h2>
@@ -148,13 +173,27 @@
         injected on every page load.
       </p>
 
+      <h2>Retention and deletion</h2>
+      <p>
+        Selected text is discarded when you close the overlay or end the
+        session.
+      </p>
+      <p>
+        Settings remain in <code>chrome.storage.local</code> until you change
+        them, clear site/extension data in Chrome, or uninstall ReadVeil.
+        Uninstalling the extension removes its stored settings.
+      </p>
+
       <h2>Limited use</h2>
       <p>
-        ReadVeil complies with the Chrome Web Store User Data Policy,
-        including the Limited Use requirements. User data (selected text and
-        local settings) is used only to provide the extension’s core reading
-        functionality. It is not used for advertising, not sold, and not
-        transferred to third parties.
+        ReadVeil complies with the
+        <a
+          href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq"
+          >Chrome Web Store User Data Policy</a
+        >, including the Limited Use requirements. User data (selected text and
+        local settings) is used only to provide and improve the extension’s
+        core reading functionality. It is not used to determine
+        creditworthiness, not sold, and not transferred to third parties.
       </p>
 
       <h2>Children’s privacy</h2>
@@ -171,7 +210,8 @@
 
       <h2>Contact</h2>
       <p>
-        Questions about this policy: reach out to dev.ttruong@gmail.com
+        Questions about this policy: reach out to
+        <a href="mailto:dev.ttruong@gmail.com">dev.ttruong@gmail.com</a>.
       </p>
     </main>
   </body>
