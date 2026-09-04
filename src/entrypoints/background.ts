@@ -2,8 +2,8 @@ import { defineBackground } from "wxt/utils/define-background";
 import { browser } from "wxt/browser";
 import type { Browser } from "wxt/browser";
 
-const START_SESSION_TYPE = "focus-reader/start-session";
-const CONTEXT_MENU_ID = "focus-reader-read";
+const START_SESSION_TYPE = "readveil/start-session";
+const CONTEXT_MENU_ID = "readveil-read";
 const OVERLAY_SCRIPT = "content-scripts/overlay.js" as "/content-scripts/overlay.js";
 
 export default defineBackground(() => {
@@ -28,7 +28,7 @@ async function ensureContextMenu(): Promise<void> {
   await browser.contextMenus.removeAll();
   browser.contextMenus.create({
     id: CONTEXT_MENU_ID,
-    title: "Read with Focus Reader",
+    title: "Read with ReadVeil",
     contexts: ["selection"],
   });
 }
