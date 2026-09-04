@@ -34,6 +34,12 @@ describe("tokenize", () => {
       expect(tokenize("don't")).toEqual(["don't"]);
       expect(tokenize("Smith's")).toEqual(["Smith's"]);
     });
+
+    it("keeps hyphenated words as one token", () => {
+      expect(tokenize("Spin-off")).toEqual(["Spin-off"]);
+      expect(tokenize("first-ever")).toEqual(["first-ever"]);
+      expect(tokenize("mid-engined")).toEqual(["mid-engined"]);
+    });
   });
 
   describe("punctuation attachment", () => {

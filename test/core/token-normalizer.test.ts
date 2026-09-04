@@ -53,6 +53,10 @@ describe("normalizeTokens", () => {
         normalizeTokens(["Dr.", "Smith", "and", "Mr.", "Jones"]),
       ).toEqual(["Dr. Smith", "and", "Mr. Jones"]);
     });
+
+    it("merges a title with a name that uses a trailing possessive apostrophe", () => {
+      expect(normalizeTokens(["Mr.", "Krabs'"])).toEqual(["Mr. Krabs'"]);
+    });
   });
 
   describe("titles + name + Sr./Jr.", () => {

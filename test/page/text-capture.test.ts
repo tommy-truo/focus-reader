@@ -111,6 +111,15 @@ describe("captureText", () => {
       );
     });
 
+    it("inserts a paragraph break between a Wikipedia-style wrapped heading and paragraph", () => {
+      document.body.innerHTML =
+        '<section><div class="mw-heading mw-heading4"><h4>Spin-off films</h4></div><p><i>Saving Bikini Bottom: The Sandy Cheeks Movie</i> is an animated adventure comedy film.</p></section>';
+      selectNodeContents(document.querySelector("section")!);
+      expect(captureText()).toBe(
+        "Spin-off films\n\nSaving Bikini Bottom: The Sandy Cheeks Movie is an animated adventure comedy film.",
+      );
+    });
+
     it("inserts a paragraph break between custom heading and text hosts", () => {
       document.body.innerHTML =
         "<section><p-heading>Porsche 718 Cayman</p-heading><p-text>The Porsche 718 Cayman is a mid-engined coupe.</p-text></section>";
