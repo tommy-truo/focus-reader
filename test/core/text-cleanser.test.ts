@@ -143,11 +143,11 @@ describe("cleanseText", () => {
       const captured = [
         "Long paragraphs ask a lot of working memory.",
         "",
-        "Focus Reader shows one segment at a time.",
+        "ReadVeil shows one segment at a time.",
       ].join("\n");
 
       expect(cleanseText(captured)).toBe(
-        "Long paragraphs ask a lot of working memory. Focus Reader shows one segment at a time.",
+        "Long paragraphs ask a lot of working memory. ReadVeil shows one segment at a time.",
       );
     });
 

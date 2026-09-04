@@ -1,6 +1,6 @@
 # Tech stack
 
-This document records **how** Focus Reader is built. The pipeline and session model are in [architecture.md](./architecture.md). Stage contracts are in [component_docs](./component_docs/).
+This document records **how** ReadVeil is built. The pipeline and session model are in [architecture.md](./architecture.md). Stage contracts are in [component_docs](./component_docs/).
 
 ## Stack
 

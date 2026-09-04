@@ -167,11 +167,11 @@ describe("remap", () => {
     it("maps an uneven auto-like list onto even custom groups", () => {
       const oldChunks = [
         "Long paragraphs ask a lot.",
-        "Focus Reader shows one segment at a time.",
+        "ReadVeil shows one segment at a time.",
       ];
       const newChunks = [
         "Long paragraphs ask a lot.",
-        "Focus Reader shows one segment",
+        "ReadVeil shows one segment",
         "at a time.",
       ];
 
