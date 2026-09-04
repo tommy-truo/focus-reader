@@ -1,6 +1,6 @@
 # Architecture
 
-Focus Reader turns a page selection into a sequence of reading chunks, then shows one chunk at a time in a full-page overlay. This document describes that pipeline, how a reading session runs, and where each stage lives. Stage contracts are in [component_docs](./component_docs/). Implementation choices (language, bundler, tests) are in [tech-stack.md](./tech-stack.md).
+ReadVeil turns a page selection into a sequence of reading chunks, then shows one chunk at a time in a full-page overlay. This document describes that pipeline, how a reading session runs, and where each stage lives. Stage contracts are in [component_docs](./component_docs/). Implementation choices (language, bundler, tests) are in [tech-stack.md](./tech-stack.md).
 
 ## Pipeline
 
@@ -52,7 +52,7 @@ Capture’s string is stored and then **forks**. The cleanser → tokenizer → 
 
 ## Session flow
 
-1. The user selects text on a page, then clicks the toolbar icon or chooses **Read with Focus Reader** from the context menu.
+1. The user selects text on a page, then clicks the toolbar icon or chooses **Read with ReadVeil** from the context menu.
 2. If the page is restricted, the selection is empty, or the text is over the size limit, the session does not start.
 3. Capture produces a single string. Live DOM selection wins over the context-menu fallback. Across frames, the longest reachable selection wins.
 4. The captured string is stored. One copy runs through cleanser → tokenizer → normalizer. The segmenter then receives **both** that normalized token list **and** the original captured string.

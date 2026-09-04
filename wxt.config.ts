@@ -10,14 +10,14 @@ const icons = {
 export default defineConfig({
   srcDir: "src",
   manifest: {
-    name: "Focus Reader",
+    name: "ReadVeil",
     description:
-      "Read selected page text one chunk at a time in a full-page overlay.",
+      "Read selected page text one segment at a time in a full-page overlay.",
     homepage_url: "https://github.com/tommy-truo/focus-reader",
     minimum_chrome_version: "120",
     permissions: ["scripting", "activeTab", "contextMenus", "storage"],
     action: {
-      default_title: "Read with Focus Reader",
+      default_title: "Read with ReadVeil",
       default_icon: icons,
     },
     icons,
