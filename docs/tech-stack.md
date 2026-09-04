@@ -1,6 +1,6 @@
 # Tech stack
 
-This document records **how** Focus Reader is built. The pipeline and session model are in [architecture.md](./architecture.md). Stage contracts are in [component_docs](./component_docs/).
+This document records **how** ReadVeil is built. The pipeline and session model are in [architecture.md](./architecture.md). Stage contracts are in [component_docs](./component_docs/).
 
 ## Stack
 
@@ -39,7 +39,7 @@ This document records **how** Focus Reader is built. The pipeline and session mo
 
 ## Source layout
 
-Inject the overlay **on toolbar click or context menu**, not on every page. Typical permissions: `scripting`, `activeTab`, `contextMenus`, `storage`.
+Inject the overlay **on toolbar click or context menu**, not on every page. Typical permissions: `scripting`, `activeTab`, `contextMenus`, `storage`. Host permissions are stripped in `wxt.config.ts` so the overlay is injected only after a user gesture.
 
 The repo uses **three layers under `src/`**, matching the runtime boundaries in [architecture.md](./architecture.md). WXT’s `entrypoints/` directory lives inside `src/` (`srcDir: 'src'`).
 

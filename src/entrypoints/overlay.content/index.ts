@@ -3,9 +3,9 @@ import { browser } from "wxt/browser";
 import { startReadingSession } from "../../page/reading-session";
 import { loadSettings, saveSettings } from "./storage";
 
-const START_SESSION_TYPE = "focus-reader/start-session";
-const HOST_ID = "focus-reader-host";
-const INJECTED_FLAG = "__focusReaderOverlayInjected";
+const START_SESSION_TYPE = "readveil/start-session";
+const HOST_ID = "readveil-host";
+const INJECTED_FLAG = "__readVeilOverlayInjected";
 
 type StartSessionMessage = {
   type: typeof START_SESSION_TYPE;

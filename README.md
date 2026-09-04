@@ -1,4 +1,4 @@
-# Focus Reader
+# ReadVeil
 
 Chrome extension that shows selected page text **one segment at a time** in a full-page overlay.
 
@@ -6,7 +6,7 @@ This file is for people working on the extension. Product intent, audience, and 
 
 ## Status
 
-Focus Reader is **in active development**. It is not on the Chrome Web Store.
+ReadVeil is **in active development**. It is not on the Chrome Web Store.
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ Then load the unpacked extension in Chrome:
 
 WXT rebuilds on save. If Chrome does not pick up a change, click **Reload** on the extension card, then refresh the page you are reading.
 
-To try a session: select text on a normal webpage, then click the toolbar icon or right-click **Read with Focus Reader**. Restricted pages (Chrome Web Store, `chrome://` URLs, and similar) cannot host the overlay.
+To try a session: select text on a normal webpage, then click the toolbar icon or right-click **Read with ReadVeil**. Restricted pages (Chrome Web Store, `chrome://` URLs, and similar) cannot host the overlay.
 
 ## Scripts
 
@@ -51,7 +51,8 @@ src/
   page/               # capture, reader view, session wiring; DOM only
   entrypoints/        # background + overlay content script; Chrome / WXT
 public/icons/         # toolbar icons copied into the packaged extension
-docs/                 # architecture, stack, stage contracts
+store/                # Chrome Web Store promo tiles (not packaged)
+docs/                 # architecture, stack, stage contracts, store listing
 PROJECT.md
 ```
 
@@ -65,6 +66,8 @@ Inject the overlay **on toolbar click or context menu**, not on every page load.
 - [Architecture](./docs/architecture.md) — pipeline, session flow, runtime boundaries
 - [Tech stack](./docs/tech-stack.md) — TypeScript, WXT, Vitest, and why
 - [Component contracts](./docs/component_docs/) — per-stage inputs, outputs, and must-nots
+- [Chrome Web Store listing](./docs/chrome-web-store.md) — paste-ready store copy and remaining upload steps
+- [Privacy policy](./docs/privacy-policy.md)
 
 ## License
 
