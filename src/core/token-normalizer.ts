@@ -22,7 +22,7 @@ const NAME_CORE_BLOCKLIST = new Set([
   "Sr",
 ]);
 
-const NAME_CORE_PATTERN = /^[A-Z][a-zA-Z]*(?:'[A-Za-z]+)?$/;
+const NAME_CORE_PATTERN = /^[A-Z][a-zA-Z]*(?:'[A-Za-z]*)?$/;
 
 function stripWrapping(token: string): string {
   if (token.length < 2) {
@@ -56,7 +56,7 @@ function isCapitalizedName(token: string): boolean {
     return false;
   }
 
-  const stem = core.replace(/'[A-Za-z]+$/, "");
+  const stem = core.replace(/'[A-Za-z]*$/, "");
   return !NAME_CORE_BLOCKLIST.has(stem);
 }
 

@@ -95,6 +95,26 @@ describe("startReadingSession", () => {
     );
   });
 
+  it("keeps a hyphenated heading on its own chunk before the following paragraph", () => {
+    document.body.innerHTML =
+      '<section><div class="mw-heading mw-heading4"><h4>Spin-off films</h4></div><p><i>Saving Bikini Bottom: The Sandy Cheeks Movie</i> is an animated adventure comedy film released on Netflix on August 2, 2024.</p></section>';
+    const range = document.createRange();
+    range.selectNodeContents(document.querySelector("section")!);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+
+    const { shadowRoot, session } = mount();
+    expect(session).not.toBeNull();
+    expect(q<HTMLElement>(shadowRoot, ".fr-chunk").textContent).toBe(
+      "Spin-off films",
+    );
+    q<HTMLButtonElement>(shadowRoot, ".fr-next").click();
+    expect(q<HTMLElement>(shadowRoot, ".fr-chunk").textContent).toMatch(
+      /^Saving Bikini Bottom:/,
+    );
+  });
+
   it("uses fallbackText when nothing is selected", () => {
     const { shadowRoot, session } = mount({ fallbackText: "Fallback chunk." });
     expect(session).not.toBeNull();

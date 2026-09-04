@@ -52,7 +52,9 @@ function readToken(
     token += suffix.token;
     i = suffix.end;
   } else {
-    const wordMatch = text.slice(i).match(/^[A-Za-z]+(?:'[A-Za-z]+)?/);
+    const wordMatch = text
+      .slice(i)
+      .match(/^[A-Za-z]+(?:'[A-Za-z]+)?(?:-[A-Za-z]+(?:'[A-Za-z]+)?)*/);
     if (wordMatch) {
       token += wordMatch[0];
       i += wordMatch[0].length;

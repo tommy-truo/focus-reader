@@ -90,6 +90,14 @@ describe("tokenize then normalize", () => {
       ]);
     });
 
+    it("fuses a titled name with a trailing possessive apostrophe", () => {
+      expect(tokenizeAndNormalize("save Mr. Krabs' life")).toEqual([
+        "save",
+        "Mr. Krabs'",
+        "life",
+      ]);
+    });
+
     it("does not treat Jr. or Sr. as a prefix title", () => {
       expect(tokenizeAndNormalize("Jr. Smith left")).toEqual([
         "Jr.",
