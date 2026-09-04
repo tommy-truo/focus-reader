@@ -46,4 +46,4 @@ When ReadVeil is ready, it will be installable from the **Chrome Web Store**. Un
 
 ## Privacy
 
-Your selected text is processed **on your device** to display reading segments. ReadVeil does not send your reading text to external servers. See the [privacy policy](./docs/privacy-policy.md) for details.
+Your selected text is processed **on your device** to display reading segments. ReadVeil does not send your reading text to external servers. See the [privacy policy](./docs/privacy/privacy-policy.md) for details.
