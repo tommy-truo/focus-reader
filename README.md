@@ -51,7 +51,8 @@ src/
   page/               # capture, reader view, session wiring; DOM only
   entrypoints/        # background + overlay content script; Chrome / WXT
 public/icons/         # toolbar icons copied into the packaged extension
-docs/                 # architecture, stack, stage contracts
+store/                # Chrome Web Store promo tiles (not packaged)
+docs/                 # architecture, stack, stage contracts, store listing
 PROJECT.md
 ```
 
@@ -65,6 +66,8 @@ Inject the overlay **on toolbar click or context menu**, not on every page load.
 - [Architecture](./docs/architecture.md) — pipeline, session flow, runtime boundaries
 - [Tech stack](./docs/tech-stack.md) — TypeScript, WXT, Vitest, and why
 - [Component contracts](./docs/component_docs/) — per-stage inputs, outputs, and must-nots
+- [Chrome Web Store listing](./docs/chrome-web-store.md) — paste-ready store copy and remaining upload steps
+- [Privacy policy](./docs/privacy-policy.md)
 
 ## License
 

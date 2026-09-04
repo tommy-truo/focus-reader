@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Focus Reader privacy policy</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7f4ee;
+        --text: #182030;
+        --muted: #5c5a55;
+        --line: #d9d4c8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #182030;
+          --text: #f7f4ee;
+          --muted: #b4b8c0;
+          --line: #2e3848;
+        }
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.55;
+      }
+      main {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+      }
+      h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.35rem;
+      }
+      .updated {
+        color: var(--muted);
+        margin-top: 0;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+      }
+      a {
+        color: inherit;
+      }
+      ul {
+        padding-left: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Focus Reader privacy policy</h1>
+      <p class="updated">Last updated: 3 September 2026</p>
+      <p>
+        Focus Reader is a Chrome extension that shows selected webpage text one
+        segment at a time in a full-page overlay. This policy describes what
+        data the extension handles and what it does not do.
+      </p>
+
+      <h2>Summary</h2>
+      <ul>
+        <li>
+          Selected text is processed <strong>on your device</strong> so the
+          overlay can show reading segments.
+        </li>
+        <li>
+          Appearance and chunking preferences are saved
+          <strong>on your device</strong> with Chrome’s local storage.
+        </li>
+        <li>
+          Focus Reader does <strong>not</strong> send your reading text,
+          browsing history, or settings to a server.
+        </li>
+        <li>
+          Focus Reader does <strong>not</strong> use analytics, advertising,
+          accounts, or third-party trackers.
+        </li>
+      </ul>
+
+      <h2>Data the extension handles</h2>
+      <h3>Selected text</h3>
+      <p>
+        When you start a session (toolbar icon or
+        <strong>Read with Focus Reader</strong> on a selection), the extension
+        reads the text you highlighted on the current page. That text stays in
+        memory for the session so Focus Reader can split it into segments and
+        rebuild chunks if you change display settings. It is not written to
+        disk, not synced, and not sent over the network. Closing the overlay
+        discards it.
+      </p>
+      <h3>Settings</h3>
+      <p>
+        The extension saves reader preferences in
+        <code>chrome.storage.local</code> on your computer: font, size, weight,
+        theme, custom colors, chunk mode, and words-on-screen count. Chrome
+        keeps this data in the browser profile. Focus Reader does not sync it
+        to a developer-operated server.
+      </p>
+      <h3>What is not collected</h3>
+      <p>
+        Focus Reader does not collect names, email addresses, account
+        credentials, payment information, location, browsing history, cookies,
+        or the full contents of pages you visit. It only reads the selection
+        you choose to send into the overlay.
+      </p>
+
+      <h2>How data is used</h2>
+      <p>
+        Selected text is used only to display reading segments in the overlay.
+        Settings are used only to restore your reader appearance and chunking
+        preferences the next time you open the overlay.
+      </p>
+
+      <h2>Sharing</h2>
+      <p>
+        Focus Reader does not sell, rent, or share user data with third
+        parties. There is no developer backend and no analytics SDK.
+      </p>
+
+      <h2>Permissions</h2>
+      <p>The extension requests:</p>
+      <ul>
+        <li>
+          <strong>activeTab</strong> — access the current tab after you click
+          the toolbar icon or the context menu item
+        </li>
+        <li><strong>scripting</strong> — inject the overlay into that tab</li>
+        <li>
+          <strong>contextMenus</strong> — add
+          <strong>Read with Focus Reader</strong> when text is selected
+        </li>
+        <li><strong>storage</strong> — save settings locally</li>
+      </ul>
+      <p>
+        The overlay is injected only after you invoke the extension. It is not
+        injected on every page load.
+      </p>
+
+      <h2>Limited use</h2>
+      <p>
+        Focus Reader complies with the Chrome Web Store User Data Policy,
+        including the Limited Use requirements. User data (selected text and
+        local settings) is used only to provide the extension’s core reading
+        functionality. It is not used for advertising, not sold, and not
+        transferred to third parties.
+      </p>
+
+      <h2>Children’s privacy</h2>
+      <p>
+        Focus Reader does not target children and does not knowingly collect
+        personal information from anyone.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy changes, the date at the top of this page will be
+        updated. The current version will always be available at this URL.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy: reach out to dev.ttruong@gmail.com
+      </p>
+    </main>
+  </body>
+</html>

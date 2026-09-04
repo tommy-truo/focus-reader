@@ -25,6 +25,8 @@ Focus Reader is a **reading display**, not a medical device or treatment. It doe
 - **A calm experience** — predictable, quiet interaction that supports concentration rather than competing with it
 - **Room to grow** — richer reading features (paste, speech) on the **same overlay**, not a sidebar
 
+
+
 ## Status
 
 Focus Reader is **in active development**. The first release is not yet available on the Chrome Web Store.
@@ -39,6 +41,8 @@ When Focus Reader is ready, it will be installable from the **Chrome Web Store**
 - [Tech stack](./docs/tech-stack.md) — language, tooling, and why
 - [Component contracts](./docs/component_docs/) — per-stage scope, inputs, and outputs
 - [README](./README.md) — setup for developers working on the extension
+
+
 
 ## Privacy
 

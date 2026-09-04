@@ -13,6 +13,7 @@ export default defineConfig({
     name: "Focus Reader",
     description:
       "Read selected page text one chunk at a time in a full-page overlay.",
+    homepage_url: "https://github.com/tommy-truo/focus-reader",
     minimum_chrome_version: "120",
     permissions: ["scripting", "activeTab", "contextMenus", "storage"],
     action: {
@@ -20,6 +21,14 @@ export default defineConfig({
       default_icon: icons,
     },
     icons,
+  },
+  hooks: {
+    "build:manifestGenerated": (_wxt, manifest) => {
+      // Overlay is injected on toolbar / context-menu click via activeTab +
+      // scripting. WXT still copies content-script matches into host_permissions;
+      // drop them so the store listing does not request all http(s) sites.
+      delete manifest.host_permissions;
+    },
   },
   webExt: {
     disabled: true,
